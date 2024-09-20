@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordenando Valores</title>
+    <script src="ordenando.js"></script> 
+    <style>
+        body 
+        {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 
+        {
+            text-align: left;
+        }
+        label, input, select, button 
+        {
+            display: block;
+            margin-top: 10px;
+        }
+        button 
+        {
+            background-color: blue;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover 
+        {
+            background-color: darkblue;
+        }
+        .buttons 
+        {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        hr 
+        {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ordenando Valores</h1>
+
+    <label for="valor">Valor</label>
+    <input type="number" id="valor" placeholder="Digite um valor">
+
+    <button class="buttons" onclick="add()">Adicionar</button>
+
+    <hr>
+
+    <select id="metodoOrdenacao">
+        <option value="bubble" selected>Bubble Sort</option>
+        <option value="selection">Selection Sort</option>
+        <option value="quick">Quick Sort</option>
+    </select>
+
+    <div style="margin-top: 10px;">
+        <button class="buttons" onclick="ordenar()">Ordenar</button>
+        <button class="buttons" onclick="misturar()">Misturar</button>
+    </div>
+
+    <hr>
+
+    <ul id="valores"></ul>
+
+    <script>
+        function add() 
+        {
+            var campoValor = document.getElementById("valor");
+            var listaValores = document.getElementById("valores");
+            var node = document.createElement("li");
+            var textoNode = document.createTextNode(campoValor.value);
+            node.appendChild(textoNode);
+            listaValores.appendChild(node);
+            campoValor.value = '';
+        }
+
+        function ordenar() 
+        {
+            var listaValores = document.getElementById("valores");
+            var metodoOrdenacao = document.getElementById("metodoOrdenacao");
+
+            var vetor = Array.from(listaValores.children).map(function(item) 
+            {
+                return eval(item.innerHTML);
+            });
+
+            var low_value = Math.min(...vetor);
+            var high_value = Math.max(...vetor);
+
+            switch (metodoOrdenacao.value) 
+            {
+                case "bubble":
+                    bubble_sort(vetor);
+                    break;
+                case "selection":
+                    selection_sort(vetor); 
+                    break;
+                case "quick":
+                    quick_sort(vetor, 0, vetor.length - 1);
+                    break;
+            }
+
+            listaValores.innerHTML = vetor.map(function(valor) 
+            {
+                return `<li>${valor}</li>`;
+            })
+            .reduce(function(acc, item) 
+            {
+                return acc + item;
+            }, '');
+        }
+
+        function misturar() {
+            var listaValores = document.getElementById("valores");
+
+            var vetor = Array.from(listaValores.children).map(function(item) 
+            {
+                return eval(item.innerHTML);
+            });
+
+            shuffle(vetor, vetor.length % 2 === 0 ? vetor.length - 1 : vetor.length);
+
+            listaValores.innerHTML = vetor.map(function(valor) 
+            {
+                return `<li>${valor}</li>`;
+            })
+            .reduce(function(acc, item) 
+            {
+                return acc + item;
+            }, '');
+        }
+    </script>
+
+</body>
+</html>
